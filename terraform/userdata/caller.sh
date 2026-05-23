@@ -5,9 +5,9 @@ apt install -y git curl unzip nodejs npm
 
 cd /home/ubuntu
 
-git clone https://github.com/Harshavardhanchary/Alchemy-ai-slm-deploy.git
+git clone https://github.com/Harshavardhanchary/slm-deploy.git
 
-cd Alchemy-ai-slm-deploy/quickstart/workers/caller-worker
+cd slm-deploy/quickstart/workers/caller-worker
 
 npm install
 
@@ -18,7 +18,7 @@ After=network.target
 
 [Service]
 User=ubuntu
-WorkingDirectory=/home/ubuntu/Alchemy-ai-slm-deploy/quickstart/workers/caller-worker
+WorkingDirectory=/home/ubuntu/slm-deploy/quickstart/workers/caller-worker
 Environment=III_URL=ws://10.0.0.174:49134
 ExecStart=/usr/bin/npm run dev
 Restart=always

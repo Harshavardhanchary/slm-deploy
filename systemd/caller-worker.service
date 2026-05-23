@@ -4,8 +4,8 @@ After=network.target
 
 [Service]
 User=ubuntu
-WorkingDirectory=/home/ubuntu/hiring/may-2026/devops/quickstart/workers/caller-worker
-Environment=III_URL=ws://10.0.0.174:49134 
+WorkingDirectory=/home/ubuntu/slm-deploy/quickstart/workers/caller-worker
+Environment=III_URL=ws://10.0.0.174:49134
 ExecStart=/usr/bin/npm run dev
 Restart=always
 

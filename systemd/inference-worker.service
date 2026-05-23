@@ -1,13 +1,12 @@
-
 [Unit]
 Description=Inference Worker
 After=network.target
 
 [Service]
 User=ubuntu
-WorkingDirectory=/home/ubuntu/hiring/may-2026/devops/quickstart/workers/inference-worker
+WorkingDirectory=/home/ubuntu/slm-deploy/quickstart/workers/inference-worker
 Environment=III_URL=ws://10.0.0.174:49134
-ExecStart=/home/ubuntu/hiring/may-2026/devops/quickstart/workers/inference-worker/venv/bin/python inference_worker.py
+ExecStart=/home/ubuntu/slm-deploy/quickstart/workers/inference-worker/venv/bin/python inference_worker.py
 Restart=always
 
 [Install]

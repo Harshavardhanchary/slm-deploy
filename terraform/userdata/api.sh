@@ -5,7 +5,7 @@ apt install -y git curl unzip python3 python3-pip python3-venv nodejs npm
 
 cd /home/ubuntu
 
-git clone https://github.com/Harshavardhanchary/Alchemy-ai-slm-deploy.git
+git clone https://github.com/Harshavardhanchary/slm-deploy.git
 
 cd Alchemy-ai-slm-deploy/quickstart
 
@@ -18,7 +18,7 @@ After=network.target
 
 [Service]
 User=ubuntu
-WorkingDirectory=/home/ubuntu/Alchemy-ai-slm-deploy/quickstart
+WorkingDirectory=/home/ubuntu/slm-deploy/quickstart
 ExecStart=/home/ubuntu/.local/bin/iii
 Restart=always
 

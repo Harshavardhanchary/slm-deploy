@@ -1,5 +1,5 @@
 variable "aws_region" {
-  default = "ap-south-1"
+  default = "ap-south-2"
 }
 
 variable "project_name" {
@@ -23,9 +23,9 @@ variable "my_ip" {
 }
 
 variable "instance_type_api" {
-  default = "t3.medium"
+  default = "m7i-flex.large"
 }
 
 variable "instance_type_worker" {
-  default = "t3.large"
+  default = "m7i-flex.large"
 }

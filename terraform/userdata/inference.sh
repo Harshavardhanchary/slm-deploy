@@ -5,9 +5,9 @@ apt install -y git curl unzip python3 python3-pip python3-venv
 
 cd /home/ubuntu
 
-git clone https://github.com/Harshavardhanchary/Alchemy-ai-slm-deploy.git
+git clone https://github.com/Harshavardhanchary/slm-deploy.git
 
-cd Alchemy-ai-slm-deploy/quickstart/workers/inference-worker
+cd slm-deploy/quickstart/workers/inference-worker
 
 python3 -m venv venv
 
@@ -22,9 +22,9 @@ After=network.target
 
 [Service]
 User=ubuntu
-WorkingDirectory=/home/ubuntu/Alchemy-ai-slm-deploy/quickstart/workers/inference-worker
+WorkingDirectory=/home/ubuntu/slm-deploy/quickstart/workers/inference-worker
 Environment=III_URL=ws://10.0.0.174:49134
-ExecStart=/home/ubuntu/Alchemy-ai-slm-deploy/quickstart/workers/inference-worker/venv/bin/python inference_worker.py
+ExecStart=/home/ubuntu/slm-deploy/quickstart/workers/inference-worker/venv/bin/python inference_worker.py
 Restart=always
 
 [Install]
