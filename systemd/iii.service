@@ -1,0 +1,13 @@
+[Unit]
+Description=III Engine
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/hiring/may-2026/devops/quickstart
+ExecStart=/home/ubuntu/.local/bin/iii
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
