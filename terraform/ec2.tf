@@ -91,18 +91,6 @@ resource "aws_instance" "caller_worker_vm" {
     volume_type = "gp3"
   }
 
-    provisioner "file" {
-    source      = "${path.module}/../scripts/caller-worker.sh"
-    destination = "/home/ubuntu/caller-worker.sh"
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "chmod +x /home/ubuntu/caller-worker.sh",
-      "/home/ubuntu/caller-worker.sh"
-    ]
-  }
-
   tags = {
     Name = "caller-worker-vm"
   }
@@ -125,17 +113,6 @@ resource "aws_instance" "inference_worker_vm" {
   root_block_device {
     volume_size = 30
     volume_type = "gp3"
-  }
-    provisioner "file" {
-    source      = "${path.module}/../scripts/inference-worker.sh"
-    destination = "/home/ubuntu/inference-worker.sh"
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "chmod +x /home/ubuntu/inference-worker.sh",
-      "/home/ubuntu/inference-worker.sh"
-    ]
   }
 
   tags = {
