@@ -19,8 +19,10 @@ resource "aws_instance" "api_vm" {
   instance_type               = var.instance_type_api
   subnet_id                   = aws_subnet.public.id
   vpc_security_group_ids      = [aws_security_group.api_sg.id]
-  key_name                    = var.key_name
-  user_data = file("${path.module}/userdata/api.sh")
+  key_name                    = aws_key_pair.generated_key.key_name
+  user_data = templatefile("${path.module}/userdata/api.sh", {
+  ssh_private_key = tls_private_key.ssh_key.private_key_pem
+  })
   associate_public_ip_address = true
 
   root_block_device {
@@ -38,8 +40,11 @@ resource "aws_instance" "caller_worker_vm" {
   instance_type          = var.instance_type_worker
   subnet_id              = aws_subnet.private.id
   vpc_security_group_ids = [aws_security_group.worker_sg.id]
-  key_name               = var.key_name
-  user_data = file("${path.module}/userdata/caller.sh")
+  key_name                = aws_key_pair.generated_key.key_name
+    
+  user_data = templatefile("${path.module}/userdata/caller.sh", {
+    iii_url = "ws://${aws_instance.api_vm.private_ip}:49134"
+  })
 
   root_block_device {
     volume_size = 20
@@ -56,8 +61,12 @@ resource "aws_instance" "inference_worker_vm" {
   instance_type          = var.instance_type_worker
   subnet_id              = aws_subnet.private.id
   vpc_security_group_ids = [aws_security_group.worker_sg.id]
-  key_name               = var.key_name
-  user_data = file("${path.module}/userdata/inference.sh")
+  key_name                = aws_key_pair.generated_key.key_name
+
+  user_data = templatefile("${path.module}/userdata/inference.sh", {
+    iii_url = "ws://${aws_instance.api_vm.private_ip}:49134"
+  })
+
 
   root_block_device {
     volume_size = 20

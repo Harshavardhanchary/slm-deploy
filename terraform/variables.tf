@@ -3,18 +3,7 @@ variable "aws_region" {
 }
 
 variable "project_name" {
-  default = "ai-worker-mesh"
-}
-
-variable "key_name" {
-  description = "Existing AWS EC2 key pair name"
-  type        = string
-}
-
-variable "public_key_path" {
-  description = "Path to public SSH key"
-  type        = string
-  default     = "~/.ssh/id_rsa.pub"
+  default = "slm-deployment"
 }
 
 variable "my_ip" {

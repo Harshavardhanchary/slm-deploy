@@ -1,7 +1,8 @@
 #!/bin/bash
 
-apt update -y
-apt install -y git curl unzip nodejs npm
+sudo apt update -y
+sudo apt upgrade -y
+sudo apt install -y git curl unzip nodejs npm
 
 cd /home/ubuntu
 
@@ -11,7 +12,7 @@ cd slm-deploy/quickstart/workers/caller-worker
 
 npm install
 
-cat > /etc/systemd/system/caller-worker.service <<EOF
+sudo cat > /etc/systemd/system/caller-worker.service <<EOF
 [Unit]
 Description=Caller Worker
 After=network.target
@@ -19,14 +20,14 @@ After=network.target
 [Service]
 User=ubuntu
 WorkingDirectory=/home/ubuntu/slm-deploy/quickstart/workers/caller-worker
-Environment=III_URL=ws://10.0.0.174:49134
-ExecStart=/usr/bin/npm run dev
+Environment="III_URL=${iii_url}"
+ExecStart=/usr/bin/npm start
 Restart=always
 
 [Install]
 WantedBy=multi-user.target
 EOF
 
-systemctl daemon-reload
-systemctl enable caller-worker
-systemctl start caller-worker
+sudo systemctl daemon-reload
+sudo systemctl enable caller-worker
+sudo systemctl start caller-worker
