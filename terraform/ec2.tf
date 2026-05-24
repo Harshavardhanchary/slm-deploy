@@ -29,23 +29,6 @@ resource "aws_instance" "api_vm" {
     volume_size = 20
     volume_type = "gp3"
   }
-  connection {
-  type        = "ssh"
-  user        = "ubuntu"
-  private_key = tls_private_key.ssh_key.private_key_pem
-  host        = self.public_ip
-}
-
-provisioner "file" {
-  content     = tls_private_key.ssh_key.private_key_pem
-  destination = "/home/ubuntu/slm-key.pem"
-}
-
-provisioner "remote-exec" {
-  inline = [
-    "chmod 400 /home/ubuntu/slm-key.pem"
-  ]
-}
 
   tags = {
     Name = "api-vm"
@@ -54,6 +37,43 @@ provisioner "remote-exec" {
   depends_on = [
     aws_nat_gateway.nat
   ]
+
+  # -----------------------------
+  # SSH Connection
+  # -----------------------------
+  connection {
+    type        = "ssh"
+    user        = "ubuntu"
+    private_key = tls_private_key.ssh_key.private_key_pem
+    host        = self.public_ip
+  }
+
+  # -----------------------------
+  # Copy API setup script
+  # -----------------------------
+  provisioner "file" {
+    source      = "${path.module}/../scripts/api-vm.sh"
+    destination = "/home/ubuntu/api-vm.sh"
+  }
+
+  # -----------------------------
+  # Copy SSH private key
+  # -----------------------------
+  provisioner "file" {
+    content     = tls_private_key.ssh_key.private_key_pem
+    destination = "/home/ubuntu/slm-key.pem"
+  }
+
+  # -----------------------------
+  # Execute setup
+  # -----------------------------
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /home/ubuntu/api-vm.sh",
+      "chmod 400 /home/ubuntu/slm-key.pem",
+      "/home/ubuntu/api-vm.sh"
+    ]
+  }
 }
 
 # -----------------------------
@@ -69,6 +89,18 @@ resource "aws_instance" "caller_worker_vm" {
   root_block_device {
     volume_size = 20
     volume_type = "gp3"
+  }
+
+    provisioner "file" {
+    source      = "${path.module}/../scripts/caller-worker.sh"
+    destination = "/home/ubuntu/caller-worker.sh"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /home/ubuntu/caller-worker.sh",
+      "/home/ubuntu/caller-worker.sh"
+    ]
   }
 
   tags = {
@@ -93,6 +125,17 @@ resource "aws_instance" "inference_worker_vm" {
   root_block_device {
     volume_size = 30
     volume_type = "gp3"
+  }
+    provisioner "file" {
+    source      = "${path.module}/../scripts/inference-worker.sh"
+    destination = "/home/ubuntu/inference-worker.sh"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /home/ubuntu/inference-worker.sh",
+      "/home/ubuntu/inference-worker.sh"
+    ]
   }
 
   tags = {
