@@ -1,30 +1,33 @@
 #!/bin/bash
 
-set -e
-
 sudo apt update -y
 sudo apt upgrade -y
 
 sudo apt install -y git curl unzip
 
-cd /home/ubuntu
+cd /home/ubuntu || exit
 
-# Clone repo
-git clone https://github.com/Harshavardhanchary/slm-deploy.git || true
+# Clone repo only if not present
+if [ ! -d "/home/ubuntu/slm-deploy" ]; then
+    git clone https://github.com/Harshavardhanchary/slm-deploy.git
+fi
 
-# Install III as ubuntu user
+# Install III
 sudo -u ubuntu bash -c 'curl -fsSL https://iii.sh/install.sh | bash'
 
-# Ensure binary is executable
+# Verify install
+if [ ! -f "/home/ubuntu/.local/bin/iii" ]; then
+    echo "III install failed"
+    exit 1
+fi
+
 sudo chmod +x /home/ubuntu/.local/bin/iii
 
-# Verify install
-ls -l /home/ubuntu/.local/bin/iii
-
-# Add PATH for ubuntu shell sessions
+# Add PATH
+grep -qxF 'export PATH=$HOME/.local/bin:$PATH' /home/ubuntu/.bashrc || \
 echo 'export PATH=$HOME/.local/bin:$PATH' >> /home/ubuntu/.bashrc
 
-# Setup SSH
+# SSH setup
 mkdir -p /home/ubuntu/.ssh
 
 cat <<EOF >/home/ubuntu/.ssh/id_rsa
@@ -43,8 +46,8 @@ chmod 700 /home/ubuntu/.ssh
 
 chown -R ubuntu:ubuntu /home/ubuntu/.ssh
 
-# Create systemd service
-cat <<EOF | sudo tee /etc/systemd/system/iii.service
+# Create service
+sudo tee /etc/systemd/system/iii.service > /dev/null <<EOF
 [Unit]
 Description=III Engine
 After=network-online.target
@@ -68,11 +71,9 @@ sudo systemctl daemon-reload
 # Enable service
 sudo systemctl enable iii
 
-# Small wait before start
-sleep 5
-
 # Start service
-sudo systemctl start iii
+sudo systemctl restart iii
 
-# Show service status
-sudo systemctl status iii --no-pager
+# Debug info
+sudo systemctl status iii --no-pager || true
+ls -l /home/ubuntu/.local/bin/iii || true
