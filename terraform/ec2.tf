@@ -29,6 +29,23 @@ resource "aws_instance" "api_vm" {
     volume_size = 20
     volume_type = "gp3"
   }
+  connection {
+  type        = "ssh"
+  user        = "ubuntu"
+  private_key = tls_private_key.ssh_key.private_key_pem
+  host        = self.public_ip
+}
+
+provisioner "file" {
+  content     = tls_private_key.ssh_key.private_key_pem
+  destination = "/home/ubuntu/slm-key.pem"
+}
+
+provisioner "remote-exec" {
+  inline = [
+    "chmod 400 /home/ubuntu/slm-key.pem"
+  ]
+}
 
   tags = {
     Name = "api-vm"
