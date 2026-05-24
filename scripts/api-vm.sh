@@ -15,3 +15,8 @@ echo 'export PATH=$HOME/.local/bin:$PATH' >> /home/ubuntu/.bashrc
 export PATH=$HOME/.local/bin:$PATH
 
 /home/ubuntu/.local/bin/iii --version
+
+##Repo clone and setup
+cd /home/ubuntu
+
+git clone https://github.com/Harshavardhanchary/slm-deploy.git
