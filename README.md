@@ -378,6 +378,13 @@ chmod +x scripts/caller-worker.sh
 ./scripts/caller-worker.sh
 ```
 
+Install Node dependencies (IMPORTANT):
+
+```
+cd quickstart/workers/caller-worker
+npm install
+cd ../../../
+```
 Install systemd service:
 
 ```bash
@@ -416,6 +423,17 @@ Run installation script:
 ```bash
 chmod +x scripts/inference-worker.sh
 ./scripts/inference-worker.sh
+```
+Set up Python environment and dependencies:
+
+```
+cd quickstart/workers/inference-worker
+python3 -m venv venv
+source venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+deactivate
+cd ../../../
 ```
 
 Install systemd service:
@@ -490,6 +508,7 @@ If the model size increased by 100x:
 - Horizontal scaling of inference workers.
 - Queue-based request processing.
 - Load balancing across inference nodes.
+- Use container orchestration (e.g., Kubernetes) for improved scalability and service management.
 
 ### Reliability
 
