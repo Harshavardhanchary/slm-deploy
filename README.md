@@ -385,6 +385,25 @@ cd quickstart/workers/caller-worker
 npm install
 cd ../../../
 ```
+### Configure III Engine URL
+
+Obtain the API VM private IP:
+
+```
+hostname -I
+```
+
+Example output:
+
+```
+10.0.0.174
+```
+
+Update the following line in service file:
+
+```
+Environment=III_URL=ws://10.0.0.174:49134
+```
 Install systemd service:
 
 ```bash
@@ -451,6 +470,28 @@ Verify:
 ```bash
 sudo systemctl status inference-worker
 ```
+# Configure III Engine URL
+
+Both worker services must point to the III engine running on the API VM.
+
+Obtain the API VM (Main VM in which iii service runs )private IP:
+
+```
+hostname -I
+```
+
+Example output:
+
+```
+10.0.0.174
+```
+
+Update the following line in both service files:
+
+```
+Environment=III_URL=ws://10.0.0.174:49134
+```
+
 ---
 # Production Hardening
 
